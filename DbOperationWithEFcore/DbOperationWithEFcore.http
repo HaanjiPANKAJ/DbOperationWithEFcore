@@ -1,6 +1,6 @@
 @DbOperationWithEFcore_HostAddress = http://localhost:5223
 
-GET {{DbOperationWithEFcore_HostAddress}}/weatherforecast/
+GET {{DbOperationWithEFcore_HostAddress}}/api/Currency/
 Accept: application/json
 
 ###
