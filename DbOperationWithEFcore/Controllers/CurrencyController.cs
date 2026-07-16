@@ -1,4 +1,5 @@
 ﻿using DbOperationWithEFcore.Data;
+using DbOperationWithEFcore.Filters;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -6,13 +7,17 @@ using Microsoft.EntityFrameworkCore;
 namespace DbOperationWithEFcore.Controllers
 {
     [Route("api/Currency")]
+    [CustomActionFilter]
     [ApiController]
     public class CurrencyController : ControllerBase
     {
         private readonly appDbContext appDbContext;
-        public CurrencyController(appDbContext _appDbContext)
+        private readonly IConfiguration configuration;
+
+        public CurrencyController(appDbContext _appDbContext, IConfiguration  configuration)
         {
             appDbContext = _appDbContext;
+            this.configuration = configuration;
         }
         [HttpGet]
         public IActionResult GetAllCurrency()
@@ -26,9 +31,11 @@ namespace DbOperationWithEFcore.Controllers
             var currencyList = await appDbContext.Currency.FindAsync(id);
             return Ok(currencyList);
         }
+        
         [HttpGet("{name}")]
         public async Task<IActionResult> GetAllCurrencyByNameAsync([FromRoute] string name)
         {
+            var x=configuration["Logging:LogLevel:Default"];
             var currencyList = await appDbContext.Currency.Where(x => x.Title == name).FirstOrDefaultAsync();
             return Ok(currencyList);
         }
